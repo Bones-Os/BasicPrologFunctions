@@ -1,0 +1,52 @@
+% Here is some data to test questions 1 and 2 - this is an example of something given by the professor (it should be obvious in all cases)
+parent(stephanie, youssef).
+parent(mahmoud, youssef).
+parent(leona, nathan).
+parent(don, nathan).
+parent(leona, cheryl).
+parent(don, cheryl).
+
+female(stephanie).
+female(cheryl).
+female(leona).
+
+male(mahmoud).
+male(youssef).
+male(nathan).
+male(don).
+
+% Question 1 (5 points) - Using the family relations defined above, write a structure that defines mother(X, Y) as "X is Y's mother".
+% Uncomment and complete the below stub. See Prolog slides on Blackboard for a hint.
+mother(X, Y) :- parent(X, Y), female(X). % X is a parent of Y, and X is female
+	
+
+% Question 2 (5 points) - Using the family relations defined above, write a structure that defines sister(X,Y) as "X is Y's sister".
+% Uncomment and complete the below stub. Use dif(X,Y) to check that X and Y are not the same person
+sister(X, Y) :- dif(X, Y), female(X), parent(PARENT, X), parent(PARENT, Y), female(PARENT). % X isn't Y, X is female, and X and Y have a parent in common. Get just one answer by only accepting parents who are female
+
+
+% Question 3 (10 points) - Define max(X, L) as "X is the largest element in list L".
+% Uncomment and complete the below stub. Use member(X, L) to check if X is in the list L. Use \+ for negation
+max(X, L) :- member(X, L), \+ (member(Y, L), Y>X). % just kinda looked at slides. Basically want X to be an element in L, and there to be no other element in L (Y) that is greater than X
+
+% Question 4 - (10 points) Define emptyInt to return true if the intersection of two lists is empty.
+% Below are two base cases for question 4, followed by the stub of a rule. Uncomment and complete the stub.
+emptyInt([],[]). % This base case says that the intersection is empty if both lists are empty
+emptyInt([],_). % This base cases says that the intersection is empty if the first list is empty
+emptyInt([H | T], L) :- \+ (member(H, L); (member(X, T), member(X, L))). % negate: the first element in the first list is in the second or there is an element in T which is also in L
+% intersection has just common elements, no duplicates
+
+
+% Question 5 - (10 points) Define listUnion(UL, L1, L2) as "UL is the union of L1 and L2".
+% things in any list, no duplicates
+listUnion([], [], []). % base case: if all empty, then good
+listUnion(U1, L1, L2) :-
+    append(L1, L2, Union), % combine L1 and L2
+    sort(Union, UnionSorted), % sort the combo of L1 and L2
+    sort(U1, U1Sorted), % sort the given union
+    U1Sorted = UnionSorted, % compare expected union with the sorted combo of L1 and L2
+    is_set(U1). % don't allow duplicates in the given union
+    
+% Question 6 - (10 points) Define finalElement(X, L) as "X is the final element of the list L".
+finalElement(_, []) :- false.% if list is empty, not good
+finalElement(X, L) :- reverse(L, ReversedL), ReversedL = [Last | _], X = Last. % reverse the list, then see if its head is X
